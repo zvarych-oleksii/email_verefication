@@ -14,4 +14,4 @@
    pip install email-verification
    ```
 ## Using
-** The example how to use my module you can see in main.py ***
+** The example how to use my module you can see in main.py **
