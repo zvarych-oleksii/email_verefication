@@ -1,8 +1,0 @@
-README.md
-setup.cfg
-setup.py
-email_verification_service.egg-info/PKG-INFO
-email_verification_service.egg-info/SOURCES.txt
-email_verification_service.egg-info/dependency_links.txt
-email_verification_service.egg-info/requires.txt
-email_verification_service.egg-info/top_level.txt

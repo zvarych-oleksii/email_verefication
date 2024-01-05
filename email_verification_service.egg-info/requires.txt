@@ -1,2 +1,0 @@
-requests>=2
-wemake-python-styleguide==0.18.0
