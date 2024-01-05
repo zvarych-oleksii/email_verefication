@@ -3,15 +3,20 @@ from typing import Dict, Union
 
 import requests
 
-HUNTER_API_KEY = '96d95ec2ea53efab6eaa859ebfa0d0a25f028a24'
 
-
-def verify_email(email: str) -> Dict[str, Union[str, bool]]:
+class EmailVerificationClient:
     """Verify email using hunter."""
-    url = f'https://api.hunter.io/v2/email-verifier?email={email}&api_key={HUNTER_API_KEY}'
-    response = requests.get(url)
-    response_data = response.json()
+    def __init__(self, api_key: str):
+        """Initialize the client."""
+        self.api_key = api_key
+        self.base_url = "https://api.hunter.io/v2/"
 
-    if response.status_code == 200:
-        return {'email': email, 'verification_result': response_data['data']['result']}
-    return {'email': email, 'verification_result': f'Error: {response_data['errors'][0]['details']}'}
+    def verify_email(self, email: str) -> Dict[str, Union[str, bool]]:
+        """Verify email using hunter."""
+        endpoint = f"email-verifier?email={email}&api_key={self.api_key}"
+        response = requests.get(self.base_url + endpoint)
+        response_data = response.json()
+
+        if response.status_code == 200:
+            return {'email': email, 'verification_result': response_data['data']['result']}
+        return {'email': email, 'verification_result': f'Error: {response_data["errors"][0]["details"]}'}

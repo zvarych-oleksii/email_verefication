@@ -36,6 +36,3 @@ class ResultDatabase:
     def exists(self, email: str) -> bool:
         """Check if email is."""
         return any(inner_email['email'] == email for inner_email in self.checked_emails)
-
-
-result_database = ResultDatabase()
