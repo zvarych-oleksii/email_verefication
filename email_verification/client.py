@@ -1,5 +1,5 @@
 """Verify email using hunter."""
-from typing import Dict, Union
+from typing import Dict
 
 import requests
 
@@ -9,12 +9,12 @@ class EmailVerificationClient(object):
 
     http_ok = 200
 
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str) -> None:
         """Initialize the client."""
         self.api_key = api_key
         self.base_url = 'https://api.hunter.io/v2/'
 
-    def verify_email(self, email: str) -> Dict[str, Union[str, bool]]:
+    def verify_email(self, email: str) -> Dict[str, str]:
         """Verify email using hunter."""
         endpoint = 'email-verifier?email={email}&api_key={api_key}'.format(email=email, api_key=self.api_key)
         response = requests.get(self.base_url + endpoint, timeout=100)

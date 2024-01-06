@@ -1,17 +1,15 @@
 """Database for email verification service."""
-from typing import Dict, List, Union
-
-EmailVerificationResult = Dict[str, Union[str, bool]]
+from typing import Dict, List
 
 
 class ResultDatabase(object):
     """Base class with CRUD operations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the database."""
-        self.checked_emails: List[EmailVerificationResult] = []
+        self.checked_emails: List[Dict[str, str]] = []
 
-    def create_result(self, email: str, verification_result: Union[str, bool]) -> bool:
+    def create_result(self, email: str, verification_result: str) -> bool:
         """Create if not exist."""
         if self.exists(email):
             self.update_result(email, verification_result)
@@ -19,7 +17,7 @@ class ResultDatabase(object):
         self.checked_emails.append({'email': email, 'verification_result': verification_result})
         return True
 
-    def get_results(self) -> List[EmailVerificationResult]:
+    def get_results(self) -> List[Dict[str, str]]:
         """Get all results."""
         return self.checked_emails
 
@@ -27,7 +25,7 @@ class ResultDatabase(object):
         """Delete if not exist."""
         self.checked_emails = [inner_email for inner_email in self.checked_emails if inner_email['email'] != email]
 
-    def update_result(self, email: str, verification_result: Union[str, bool]) -> None:
+    def update_result(self, email: str, verification_result: str) -> None:
         """Update if not exist."""
         for inner_email in self.checked_emails:
             if inner_email['email'] == email:
