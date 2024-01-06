@@ -4,7 +4,7 @@ from typing import Dict, List, Union
 EmailVerificationResult = Dict[str, Union[str, bool]]
 
 
-class ResultDatabase:
+class ResultDatabase(object):
     """Base class with CRUD operations."""
 
     def __init__(self):
