@@ -22,5 +22,5 @@
 
 **To update email_verification use:**
 ```bash
-pip update email-verification
+pip install --upgrade email-verification
 ```
