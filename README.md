@@ -5,10 +5,11 @@
 
 - [Installation](#installation)
 - [Example](#using)
+- [Update](#update)
 
 ## Installation
 
-1. **For using module in project use:**
+**For using module in project use:**
 
    ```bash
    pip install email-verification
@@ -16,3 +17,10 @@
 ## Using
 
    **The example how to use my module you can see in main.py**
+
+## Update
+
+**To update email_verification use:**
+```bash
+pip update email-verification
+```
