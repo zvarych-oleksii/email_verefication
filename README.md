@@ -1,4 +1,4 @@
-# Email verification
+# Email verification v0.2.0
 
 
 ## Table of Contents
