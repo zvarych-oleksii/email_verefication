@@ -12,7 +12,7 @@
 **For using module in project use:**
 
    ```bash
-   pip install email-verification
+   pip install email-verification==0.3.0
    ```
 ## Using
 
