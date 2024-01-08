@@ -1,6 +1,6 @@
 """Service to use email verification client with database."""
 import logging
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import requests
 
@@ -18,27 +18,51 @@ class EmailVerificationService(object):
         self.db = db
         self.logger = logging.getLogger(__name__)
 
-    def count_emails(self, domain: str, **kwargs) -> Dict[str, str]:
+    def count_emails(self, domain: str, **kwargs: str) -> Any:
         """Count the number of emails in the given domain and handle errors."""
         try:
             return self.client.count_emails(domain, **kwargs)
         except requests.exceptions.RequestException as request_exception:
-            self.logger.error('Request error for domain {0}: {1}'.format(domain, request_exception))
-            return {'Error': 'Request error: {request_exception}'.format(request_exception=str(request_exception))}
+            self.logger.error(
+                'Request error for domain {0}: {1}'.format(domain, request_exception),
+            )
+            return {
+                'Error': 'Request error: {request_exception}'.format(
+                    request_exception=str(request_exception),
+                ),
+            }
         except Exception as exception:
-            self.logger.error('Unexpected error for domain {0}: {1}'.format(domain, exception))
-            return {'Error': 'Unexpected error: {exception}'.format(exception=str(exception))}
+            self.logger.error(
+                'Unexpected error for domain {0}: {1}'.format(domain, exception),
+            )
+            return {
+                'Error': 'Unexpected error: {exception}'.format(
+                    exception=str(exception),
+                ),
+            }
 
-    def email_verification(self, email: str) -> Dict[str, str]:
+    def email_verification(self, email: str) -> Any:
         """Email verification using hunter client and database."""
         try:
             verification_result = self.client.verify_email(email)
         except requests.exceptions.RequestException as request_exception:
-            self.logger.error('Request error for email {0}: {1}'.format(email, request_exception))
-            return {'Request error': '{request_exception}'.format(request_exception=str(request_exception))}
+            self.logger.error(
+                'Request error for email {0}: {1}'.format(email, request_exception),
+            )
+            return {
+                'Request error': '{request_exception}'.format(
+                    request_exception=str(request_exception),
+                ),
+            }
         except Exception as exception:
-            self.logger.error('Unexpected error for email {0}: {1}'.format(email, exception))
-            return {'Unexpected error': '{exception}'.format(exception=str(exception))}
+            self.logger.error(
+                'Unexpected error for email {0}: {1}'.format(email, exception),
+            )
+            return {
+                'Unexpected error': '{exception}'.format(
+                    exception=str(exception),
+                ),
+            }
         verification_result = response_normalizer(verification_result)
         email_to_save = verification_result.pop('meta_params_email')
         self.db.create_result(email_to_save, verification_result)
@@ -48,18 +72,26 @@ class EmailVerificationService(object):
         """Show all verification results."""
         return self.db.get_results()
 
-    def delete_result(self, email: str) -> Tuple[str, Dict]:
+    def delete_result(self, email: str) -> Tuple[str, Dict[str, str]]:
         """Delete result and handle errors."""
         try:
             self.db.delete_result(email)
         except Exception as exception:
-            return email, {'error': 'Unexpected error: {exception}'.format(exception=str(exception))}
+            return email, {
+                'error': 'Unexpected error: {exception}'.format(
+                    exception=str(exception),
+                ),
+            }
         return email, {'status': 'deleted'}
 
-    def get_result(self, email: str) -> Tuple[str, Dict]:
+    def get_result(self, email: str) -> Tuple[str, Dict[str, str]]:
         """Get verification email if exists."""
         try:
             get_result = self.db.get_result(email)
         except Exception as exception:
-            return email, {'error': 'Unexpected error: {exception}'.format(exception=str(exception))}
+            return email, {
+                'error': 'Unexpected error: {exception}'.format(
+                    exception=str(exception),
+                ),
+            }
         return email, get_result
