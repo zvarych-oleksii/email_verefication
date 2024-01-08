@@ -1,5 +1,5 @@
 """Verify email using hunter."""
-from typing import Any
+from typing import Dict
 from urllib.parse import urlencode, urljoin
 
 import requests
@@ -16,37 +16,23 @@ class EmailVerificationClient(object):
         self.timeout = timeout
         self.base_url = 'https://api.hunter.io/v2/'
 
-    def verify_email(self, email: str) -> Any:
-        """Verify email using hunter."""
-        request_params = {'email': email}
-        url = self._url_builder('email-verifier', request_params)
+    def make_request(self, endpoint: str, **kwargs: str) -> Dict[str, str]:
+        """Make a generic request using hunter."""
+        url = self._url_builder(endpoint, **kwargs)
         response_data = self._make_request(url)
         return response_data.json()
 
-    def count_emails(self, domain: str, company: str = '', email_type: str = '') -> Any:
-        """Count all emails using hunter."""
-        request_params = {
-            'domain': domain,
-            'company': company,
-            'email_type': email_type,
-        }
-        url = self._url_builder('email-count', request_params)
-        response_data = self._make_request(url)
-        return response_data.json()
-
-    def _url_builder(self, url: str, request_params: Any) -> str:
+    def _url_builder(self, url: str, **kwargs: str) -> str:
         """Build url using urllib and format."""
-        request_params['api_key'] = self.api_key
-        request_params = {
-            key: entered_param
-            for key, entered_param in request_params.items()
-            if entered_param
-        }
-        request_params = urlencode(request_params)
-        endpoint = '{request_url}?{request_params}'.format(
-            request_url=url, request_params=request_params,
+        kwargs['api_key'] = self.api_key
+        filtered_params = {key: request_param for key, request_param in kwargs.items() if request_param}
+        encoded_params = urlencode(filtered_params)
+        full_url = '{base_url}{endpoint}?{params}'.format(
+            base_url=self.base_url,
+            endpoint=url,
+            params=encoded_params,
         )
-        return urljoin(self.base_url, endpoint)
+        return urljoin(self.base_url, full_url)
 
     def _make_request(self, request_url: str) -> requests.Response:
         """Make a request to hunters."""

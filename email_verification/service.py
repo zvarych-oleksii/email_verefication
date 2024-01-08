@@ -1,6 +1,6 @@
 """Service to use email verification client with database."""
 import logging
-from typing import Any, Dict, List, Tuple
+from typing import Dict, List, Tuple
 
 import requests
 
@@ -18,10 +18,10 @@ class EmailVerificationService(object):
         self.db = db
         self.logger = logging.getLogger(__name__)
 
-    def count_emails(self, domain: str, **kwargs: str) -> Any:
+    def count_emails(self, domain: str, **kwargs: str) -> Dict[str, str]:
         """Count the number of emails in the given domain and handle errors."""
         try:
-            return self.client.count_emails(domain, **kwargs)
+            return self.client.make_request('email-count', domain=domain, **kwargs)
         except requests.exceptions.RequestException as request_exception:
             self.logger.error(
                 'Request error for domain {0}: {1}'.format(domain, request_exception),
@@ -41,10 +41,10 @@ class EmailVerificationService(object):
                 ),
             }
 
-    def email_verification(self, email: str) -> Any:
+    def email_verification(self, email: str) -> Dict[str, str]:
         """Email verification using hunter client and database."""
         try:
-            verification_result = self.client.verify_email(email)
+            verification_result = self.client.make_request('email-verifier', email=email)
         except requests.exceptions.RequestException as request_exception:
             self.logger.error(
                 'Request error for email {0}: {1}'.format(email, request_exception),
@@ -84,14 +84,14 @@ class EmailVerificationService(object):
             }
         return email, {'status': 'deleted'}
 
-    def get_result(self, email: str) -> Tuple[str, Dict[str, str]]:
+    def get_result(self, email: str) -> Dict[str, str]:
         """Get verification email if exists."""
         try:
             get_result = self.db.get_result(email)
         except Exception as exception:
-            return email, {
+            return {
                 'error': 'Unexpected error: {exception}'.format(
                     exception=str(exception),
                 ),
             }
-        return email, get_result
+        return get_result
