@@ -29,16 +29,16 @@ class EmailVerificationService(object):
             self.logger.error('Unexpected error for domain {0}: {1}'.format(domain, exception))
             return {'Error': 'Unexpected error: {exception}'.format(exception=str(exception))}
 
-    def perform_verification(self, email: str) -> Dict[str: str]:
-        """Email verification service using EmailVerificationClient and database."""
+    def email_verification(self, email: str) -> Dict[str, str]:
+        """Email verification using hunter client and database."""
         try:
             verification_result = self.client.verify_email(email)
         except requests.exceptions.RequestException as request_exception:
             self.logger.error('Request error for email {0}: {1}'.format(email, request_exception))
-            return email, {'Request error': '{request_exception}'.format(request_exception=str(request_exception))}
+            return {'Request error': '{request_exception}'.format(request_exception=str(request_exception))}
         except Exception as exception:
             self.logger.error('Unexpected error for email {0}: {1}'.format(email, exception))
-            return email, {'Unexpected error': '{exception}'.format(exception=str(exception))}
+            return {'Unexpected error': '{exception}'.format(exception=str(exception))}
         verification_result = response_normalizer(verification_result)
         email_to_save = verification_result.pop('meta_params_email')
         self.db.create_result(email_to_save, verification_result)

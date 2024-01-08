@@ -14,7 +14,7 @@ def main():
 
     # Example email for verification
     email_to_verify = 'invalid_email'
-    result_verification = service.perform_verification(email_to_verify)
+    result_verification = service.email_verification(email_to_verify)
 
 
 
