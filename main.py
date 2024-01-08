@@ -3,31 +3,19 @@ from email_verification.client import EmailVerificationClient
 from email_verification.database import ResultDatabase
 from email_verification.service import EmailVerificationService
 
+
 def main():
     # Replace 'your_api_key' with your actual Hunter API key
-    api_key = 'your_api_key'
+    api_key = '96d95ec2ea53efab6eaa859ebfa0d0a25f028a24'
 
     # Initialize the EmailVerificationClient and EmailVerificationService
-    client = EmailVerificationClient(api_key)
     result_database = ResultDatabase()
     service = EmailVerificationService(api_key, result_database)
 
     # Example email for verification
-    email_to_verify = 'example@example.com'
+    email_to_verify = 'invalid_email'
+    result_verification = service.perform_verification(email_to_verify)
 
-    # Perform email verification
-    email, verification_result = service.perform_verification(email_to_verify)
-
-    # Display verification result
-    print(f"Verification result for {email}: {verification_result}")
-
-    # Get all verification results
-    all_results = service.get_all_results()
-
-    # Display all verification results
-    print("All verification results:")
-    for result in all_results:
-        print(result)
 
 
 if __name__ == '__main__':

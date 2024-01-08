@@ -1,4 +1,4 @@
-"""Database for email verification service."""
+"""Database."""
 from typing import Dict, List
 
 
@@ -9,28 +9,40 @@ class ResultDatabase(object):
         """Initialize the database."""
         self.checked_emails: List[Dict[str, str]] = []
 
-    def create_result(self, email: str, verification_result: str) -> bool:
+    def create_result(self, email: str, verification_result: Dict[str, str]) -> bool:
         """Create if not exist."""
         if self.exists(email):
             self.update_result(email, verification_result)
             return False
-        self.checked_emails.append({'email': email, 'verification_result': verification_result})
+        verification_result['email'] = email.upper()
+        self.checked_emails.append(verification_result)
         return True
 
     def get_results(self) -> List[Dict[str, str]]:
         """Get all results."""
         return self.checked_emails
 
-    def delete_result(self, email: str) -> None:
-        """Delete if not exist."""
-        self.checked_emails = [inner_email for inner_email in self.checked_emails if inner_email['email'] != email]
+    def get_result(self, email: str) -> Dict[str, str]:
+        """Get result for a specific email."""
+        for inner_result in self.checked_emails:
+            if inner_result['email'].upper() == email.upper():
+                return inner_result
+        return {'error': 'Result not found for email: {email}'.format(email=email)}
 
-    def update_result(self, email: str, verification_result: str) -> None:
-        """Update if not exist."""
+    def delete_result(self, email: str) -> None:
+        """Delete if exists."""
+        new_checked_emails = []
+        for inner_result in self.checked_emails:
+            if inner_result['email'].upper() != email.upper():
+                new_checked_emails.append(inner_result)
+        self.checked_emails = new_checked_emails
+
+    def update_result(self, email: str, verification_result: Dict[str, str]) -> None:
+        """Update if exists."""
         for inner_email in self.checked_emails:
-            if inner_email['email'] == email:
-                inner_email['verification_result'] = verification_result
+            if inner_email['email'] == email.upper():
+                inner_email.update(verification_result)
 
     def exists(self, email: str) -> bool:
-        """Check if email is."""
-        return any(inner_email['email'] == email for inner_email in self.checked_emails)
+        """Check if email exists."""
+        return any(inner_email['email'] == email.upper() for inner_email in self.checked_emails)
