@@ -1,4 +1,4 @@
-"""Verify email using hunter."""
+"""Verify email using hunter.
 from typing import Dict
 from urllib.parse import urlencode, urljoin
 
@@ -40,3 +40,4 @@ class EmailVerificationClient(object):
         if response.status_code != self.http_ok:
             response.raise_for_status()
         return response
+"""
