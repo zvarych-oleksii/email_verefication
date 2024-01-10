@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="874c5d97-0b90-4765-8244-ce1944220789" name="Changes" comment="Version 0.4.4" />
+    <list default="true" id="874c5d97-0b90-4765-8244-ce1944220789" name="Changes" comment="Version 0.4.4">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/email_verification/api_handlers/EmailCountApiClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/email_verification/api_handlers/EmailCountApiHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/email_verification/api_handlers/EmailVerifierApiClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/email_verification/api_handlers/EmailVerifierApiHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/email_verification/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/email_verification/service.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,6 +108,7 @@
       <workItem from="1704702025446" duration="8611000" />
       <workItem from="1704801192242" duration="1059000" />
       <workItem from="1704812197261" duration="12504000" />
+      <workItem from="1704876259592" duration="2068000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit.">
       <option name="closed" value="true" />

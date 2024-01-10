@@ -4,7 +4,7 @@ from typing import Dict
 from email_verification.api_handlers.BaseApiHandler import BaseApiHandler
 
 
-class EmailVerifier(BaseApiHandler):
+class EmailVerifierApiHandler(BaseApiHandler):
     """Class for handling email verification API endpoint."""
 
     @property
@@ -17,6 +17,6 @@ class EmailVerifier(BaseApiHandler):
         """Insert new base url for Email Verification API endpoint."""
         self._base_url = inserting_base_url
 
-    def verify_email(self, email: str) -> Dict:
+    def make_get_request(self, email: str) -> Dict:
         """Verify the given email."""
         return self._get(path='email-verifier', request_params={'email': email})

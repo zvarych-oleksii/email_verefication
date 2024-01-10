@@ -1,9 +1,10 @@
-"""Service to use email verification client with database."""
+"""Service module."""
 import logging
 from typing import Dict, List, Tuple
 
-from email_verification.api_handlers.EmailCountApiClient import EmailCountApiClient
-from email_verification.api_handlers.EmailVerifierApiClient import EmailVerifier
+from email_verification.api_client.api_client import ApiClient
+from email_verification.api_handlers.EmailCountApiHandler import EmailCountApiHandler
+from email_verification.api_handlers.EmailVerifierApiHandler import EmailVerifierApiHandler
 from email_verification.database import ResultDatabase
 from email_verification.utils.response_normilizer import response_normalizer
 
@@ -13,15 +14,20 @@ class EmailVerificationService(object):
 
     def __init__(self, api_key: str, db: ResultDatabase) -> None:
         """Initialize the service."""
-        self.count_client = EmailCountApiClient(api_key)
-        self.verify_client = EmailVerifier(api_key)
+        self.api_client = ApiClient(api_key)
+        self.api_client.register_client_handler('email-count', EmailCountApiHandler)
+        self.api_client.register_client_handler('email-verifier', EmailVerifierApiHandler)
         self.db = db
         self.logger = logging.getLogger(__name__)
 
     def count_emails(self, domain: str, **kwargs: str) -> Dict[str, str]:
         """Count the number of emails in the given domain and handle errors."""
         try:
-            return self.count_client.get_email_count({'domain': domain, **kwargs})
+            return self.api_client.make_request(
+                endpoint='email-count',
+                method='GET',
+                request_params={'domain': domain, **kwargs},
+            )
         except Exception as exception:
             self.logger.error(
                 'Error counting emails for domain {0}: {1}'.format(domain, exception),
@@ -31,7 +37,7 @@ class EmailVerificationService(object):
     def email_verification(self, email: str) -> Dict[str, str]:
         """Email verification using hunter client and database."""
         try:
-            verification_result = self.verify_client.verify_email(email)
+            verification_result = self.api_client.make_request(endpoint='email-verifier', method='GET', email=email)
         except Exception as exception:
             self.logger.error(
                 'Error verifying email {0}: {1}'.format(email, exception),

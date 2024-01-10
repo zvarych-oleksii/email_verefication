@@ -4,7 +4,7 @@ from typing import Dict
 from email_verification.api_handlers.BaseApiHandler import BaseApiHandler
 
 
-class EmailCountApiClient(BaseApiHandler):
+class EmailCountApiHandler(BaseApiHandler):
     """Class for handling email count API endpoint."""
 
     @property
@@ -17,6 +17,6 @@ class EmailCountApiClient(BaseApiHandler):
         """Insert new base url for Email Verification API endpoint."""
         self._base_url = inserting_base_url
 
-    def get_email_count(self, request_params: Dict[str, str]) -> Dict[str, str]:
+    def make_get_request(self, request_params: Dict[str, str]) -> Dict[str, str]:
         """Get the count of emails for the given domain."""
         return self._get(path='email-count', request_params=request_params)
